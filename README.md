@@ -1,1 +1,1 @@
-# syndicate
+# Solana program template
