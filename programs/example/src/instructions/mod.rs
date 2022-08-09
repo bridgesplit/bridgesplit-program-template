@@ -1,3 +1,3 @@
-pub mod example_instruction;
+pub mod ix;
 
-pub use example_instruction::*;
+pub use ix::*;

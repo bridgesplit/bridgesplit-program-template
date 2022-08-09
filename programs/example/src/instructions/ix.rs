@@ -10,7 +10,7 @@ pub struct ExampleInstruction<'info> {
     pub initializer_account: Signer<'info>,
     #[account(
         init,
-        seeds = [EXAMPLE_SEED.as_ref(),
+        seeds = [EXAMPLE_SEED,
         initializer_account.key().as_ref()],
         bump,
         payer = initializer_account,
@@ -23,7 +23,7 @@ pub struct ExampleInstruction<'info> {
 
 impl<'info> ExampleInstruction<'info> {}
 
-pub fn handler(ctx: Context<ExampleInstruction>, _example_bump: u8) -> ProgramResult {
+pub fn handler(ctx: Context<ExampleInstruction>) -> ProgramResult {
     msg!("Beginning instruction ...");
 
     let example_account = &mut ctx.accounts.example_account;
