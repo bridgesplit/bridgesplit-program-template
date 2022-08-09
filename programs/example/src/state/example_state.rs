@@ -4,5 +4,5 @@ use anchor_lang::prelude::*;
 pub struct ExampleAccount {
     pub initializer_account_pubkey: Pubkey,
     pub creation_time: i64,
-    pub reserve: [u8; 512]
+    pub reserve: [u8; 512],
 }

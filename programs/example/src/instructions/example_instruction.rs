@@ -1,5 +1,5 @@
-use anchor_lang::{prelude::*, solana_program::entrypoint::ProgramResult};
 use anchor_lang::Key;
+use anchor_lang::{prelude::*, solana_program::entrypoint::ProgramResult};
 
 use crate::state::*;
 
@@ -10,9 +10,9 @@ pub struct ExampleInstruction<'info> {
     pub initializer_account: Signer<'info>,
     #[account(
         init,
-        seeds = [EXAMPLE_SEED.as_ref(), 
+        seeds = [EXAMPLE_SEED.as_ref(),
         initializer_account.key().as_ref()],
-        bump, 
+        bump,
         payer = initializer_account,
         space = 8 + std::mem::size_of::<ExampleAccount>())]
     pub example_account: Box<Account<'info, ExampleAccount>>,
@@ -21,20 +21,17 @@ pub struct ExampleInstruction<'info> {
     pub clock: Sysvar<'info, Clock>,
 }
 
-impl <'info> ExampleInstruction<'info> {
-}
+impl<'info> ExampleInstruction<'info> {}
 
-pub fn handler(
-    ctx: Context<ExampleInstruction>, 
-    _example_bump: u8,) -> ProgramResult {
-        msg!("Beginning instruction ...");
-        
-        let example_account = &mut ctx.accounts.example_account;
-        example_account.initializer_account_pubkey = ctx.accounts.initializer_account.key();
-        
-        example_account.creation_time = ctx.accounts.clock.unix_timestamp;
+pub fn handler(ctx: Context<ExampleInstruction>, _example_bump: u8) -> ProgramResult {
+    msg!("Beginning instruction ...");
 
-        msg!("Example complete.");
+    let example_account = &mut ctx.accounts.example_account;
+    example_account.initializer_account_pubkey = ctx.accounts.initializer_account.key();
 
-        Ok(())
+    example_account.creation_time = ctx.accounts.clock.unix_timestamp;
+
+    msg!("Example complete.");
+
+    Ok(())
 }
