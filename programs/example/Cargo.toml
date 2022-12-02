@@ -16,6 +16,7 @@ default = []
 
 [dependencies]
 anchor-lang = "0.24.2"
+num_enum = "0.5.6"
 
 [dev-dependencies.cargo-husky]
 version = "1"
