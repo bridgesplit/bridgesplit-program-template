@@ -326,6 +326,26 @@ describe("Post a Sale, Cancel it, Post Another, then buyout", () => {
     })
 
     it ("Allows seller to claim the payment", async () => {
-      expect(true);
+      let sellerPaymentAtai = await getOrCreateATA({
+        provider: provider,
+        mint: paymentMintKey,
+        owner: seller.publicKey
+      })
+      if (sellerPaymentAtai.instruction){
+        await expectTX(new TransactionEnvelope(provider, [sellerPaymentAtai.instruction])).to.be.fulfilled;
+      }
+
+      let claimIxn = program.instruction.claimBuyout({
+        accounts: {
+          seller: seller.publicKey,
+          salesVault: salesVault2,
+          fractionsMint: fractionsMint2,
+          paymentMint: paymentMintKey,
+          sellerPaymentAccount: sellerPaymentAtai.address,
+          salesVaultPaymentAccount: salesVault2Payment,
+          tokenProgram: TOKEN_PROGRAM_ID
+        }
+      })
+      await expectTX(new TransactionEnvelope(provider, [claimIxn], [buyer])).to.be.fulfilled;
     })
 });
