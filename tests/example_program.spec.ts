@@ -3,7 +3,7 @@ import { Program, BN } from "@project-serum/anchor";
 import { Example } from "../target/types/example";
 import { SolanaProvider, TransactionEnvelope } from "@saberhq/solana-contrib";
 import { ASSOCIATED_TOKEN_PROGRAM_ID, getOrCreateATA, TOKEN_PROGRAM_ID, SPLToken } from "@saberhq/token-utils";
-import { expect, use } from "chai";
+import { use } from "chai";
 import { Keypair, PublicKey, SystemProgram, SYSVAR_CLOCK_PUBKEY, SYSVAR_RENT_PUBKEY } from "@solana/web3.js";
 import { TokenMetadataProgram } from "@metaplex-foundation/js";
 import { chaiSolana, expectTX } from "@saberhq/chai-solana";
