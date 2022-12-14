@@ -73,7 +73,8 @@ describe("Post a Sale, Cancel it, Post Another, then buyout", () => {
     const total_shares = 10000;
     const sold_shares = 5000;
 
-    const uri: string = "https://rhlzpyjastylfvqnpzf4fjw5lrea3waof7ufcwb3xhsrob3r6m.arweave.net/ideX4SCU8LLWDX5LwqbdXEgN2A4v6FFYO7nlF-wdx8w";
+    // Random NFT metadata
+    const uri: string = "https://arweave.net/1wnV18kFZ5Lov64P-_mQRp5ARj_i4n_IAX4rjS_g4VE";
 
     before ("Initializing Accounts", async () => {
       // Creating payment scheme
