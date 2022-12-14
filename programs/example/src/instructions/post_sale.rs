@@ -1,6 +1,7 @@
 use anchor_lang::{prelude::*, solana_program::entrypoint::ProgramResult};
+use anchor_spl::associated_token::Create;
 use anchor_spl::token;
-use anchor_spl::{associated_token::AssociatedToken, token::*};
+use anchor_spl::{associated_token, associated_token::AssociatedToken, token::*};
 use vault::cpi::accounts::Fractionalize;
 
 use crate::state::*;
@@ -37,36 +38,25 @@ pub struct PostSale<'info> {
         constraint = seller_nft_account.owner == seller.key(),
     )]
     pub seller_nft_account: Box<Account<'info, TokenAccount>>,
-
-    #[account(
-        mut,
-        constraint = bs_vault_nft_account.mint == nft_mint.key(),
-        constraint = bs_vault_nft_account.owner == bridgesplit_vault.key(),
-    )]
-    pub bs_vault_nft_account: Box<Account<'info, TokenAccount>>,
+    /// CHECK: Checks in Bridgesplit
+    #[account(mut)]
+    pub bs_vault_nft_account: UncheckedAccount<'info>,
     /// CHECK: Checks in Bridgesplit
     #[account(mut)]
     pub fractions_mint: AccountInfo<'info>,
-
-    #[account(
-        mut,
-        constraint = seller_fractions_account.mint == fractions_mint.key(),
-        constraint = seller_fractions_account.owner == seller.key(),
-    )]
-    pub seller_fractions_account: Box<Account<'info, TokenAccount>>,
-
-    #[account(
-        mut,
-        constraint = sales_vault_fractions_account.mint == fractions_mint.key(),
-        constraint = sales_vault_fractions_account.owner == sales_vault.key(),
-    )]
-    pub sales_vault_fractions_account: Box<Account<'info, TokenAccount>>,
+    /// CHECK: Checks in Bridgesplit
+    #[account(mut)]
+    pub seller_fractions_account: UncheckedAccount<'info>,
+    /// CHECK: Checks in Associated Token Program
+    #[account(mut)]
+    pub sales_vault_fractions_account: UncheckedAccount<'info>,
     /// CHECK: Checks done in Bridgesplit
     pub bridgesplit_program: UncheckedAccount<'info>,
     /// CHECK: Checks done in Bridgesplit
     pub mpl_token_metadata: UncheckedAccount<'info>,
     pub associated_token_program: Program<'info, AssociatedToken>,
     /// CHECK: Checks in Bridgesplit
+    #[account(mut)]
     pub metadata_account: UncheckedAccount<'info>,
     pub system_program: Program<'info, System>,
     pub token_program: Program<'info, Token>,
@@ -94,6 +84,22 @@ impl<'info> PostSale<'info> {
             clock: self.clock.to_account_info(),
         };
         CpiContext::new(self.bridgesplit_program.to_account_info(), cpi_accounts)
+    }
+
+    fn create_ata(&self) -> CpiContext<'_, '_, '_, 'info, Create<'info>> {
+        let cpi_accounts = Create {
+            payer: self.seller.to_account_info(),
+            associated_token: self.sales_vault_fractions_account.to_account_info(),
+            authority: self.sales_vault.to_account_info(),
+            mint: self.fractions_mint.to_account_info(),
+            system_program: self.system_program.to_account_info(),
+            token_program: self.token_program.to_account_info(),
+            rent: self.rent.to_account_info(),
+        };
+        CpiContext::new(
+            self.associated_token_program.to_account_info(),
+            cpi_accounts,
+        )
     }
 
     fn transfer_fractions(&self) -> CpiContext<'_, '_, '_, 'info, Transfer<'info>> {
@@ -136,6 +142,9 @@ pub fn handler(
         name,
         symbol,
     )?;
+
+    // Create sales_vault ATA
+    associated_token::create(ctx.accounts.create_ata())?;
 
     // transfer fractions to sales vault
     token::transfer(ctx.accounts.transfer_fractions(), sold_shares)?;
