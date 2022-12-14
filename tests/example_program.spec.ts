@@ -2,8 +2,8 @@ import * as anchor from "@project-serum/anchor";
 import { Program, BN } from "@project-serum/anchor";
 import { Example } from "../target/types/example";
 import { SolanaProvider, TransactionEnvelope } from "@saberhq/solana-contrib";
-import { ASSOCIATED_TOKEN_PROGRAM_ID, getOrCreateATA, TOKEN_PROGRAM_ID, SPLToken } from "@saberhq/token-utils";
-import { use } from "chai";
+import { ASSOCIATED_TOKEN_PROGRAM_ID, getOrCreateATA, TOKEN_PROGRAM_ID, SPLToken, getTokenAccount } from "@saberhq/token-utils";
+import { expect, use } from "chai";
 import { Keypair, PublicKey, SystemProgram, SYSVAR_CLOCK_PUBKEY, SYSVAR_RENT_PUBKEY } from "@solana/web3.js";
 import { TokenMetadataProgram } from "@metaplex-foundation/js";
 import { chaiSolana, expectTX } from "@saberhq/chai-solana";
@@ -68,6 +68,10 @@ describe("Post a Sale, Cancel it, Post Another, then buyout", () => {
     let fractionsMint2: PublicKey;
     let sellerFractions2Account: PublicKey;
     let salesVaultFractions2Account: PublicKey;
+
+    const price = 100;
+    const total_shares = 10000;
+    const sold_shares = 5000;
 
     const uri: string = "https://rhlzpyjastylfvqnpzf4fjw5lrea3waof7ufcwb3xhsrob3r6m.arweave.net/ideX4SCU8LLWDX5LwqbdXEgN2A4v6FFYO7nlF-wdx8w";
 
@@ -180,7 +184,7 @@ describe("Post a Sale, Cancel it, Post Another, then buyout", () => {
         TokenMetadataProgram.publicKey
       );
       
-      let postIxn = program.instruction.postSale(new BN(50), nonce, new BN(500), new BN(1000), uri, 'Example Nft', 'xNFT', {
+      let postIxn = program.instruction.postSale(new BN(price), nonce, new BN(sold_shares), new BN(total_shares), uri, 'Example Nft', 'xNFT', {
         accounts: {
           seller: seller.publicKey,
           salesVault: salesVault1,
@@ -201,8 +205,25 @@ describe("Post a Sale, Cancel it, Post Another, then buyout", () => {
           rent: SYSVAR_RENT_PUBKEY,
           clock: SYSVAR_CLOCK_PUBKEY
         }
-      })
+      });
+
       await expectTX(new TransactionEnvelope(provider, [postIxn], [seller])).to.be.fulfilled;
+
+      let bsVaultNftTokAccount = await getTokenAccount(provider, bsVaultNftAccount.address);
+      let bsVaultNftTokAccountAmount = bsVaultNftTokAccount.amount.toNumber();
+      expect(bsVaultNftTokAccountAmount == 1, "BS Vault didn't get NFT");
+
+      let sellerNftTokAccount = await getTokenAccount(provider, sellerNft1Key);
+      let sellerNftTokAccountAmount = sellerNftTokAccount.amount.toNumber();
+      expect(sellerNftTokAccountAmount == 0, "Seller Kept their NFT");
+
+      let salesVaultFractionsTokAccount = await getTokenAccount(provider, salesVaultFractions1Account);
+      let salesVaultFractionsTokAccountAmount = salesVaultFractionsTokAccount.amount.toNumber();
+      expect(salesVaultFractionsTokAccountAmount == sold_shares, "Sales Vault didn't get Fractions");
+
+      let sellerFractionsTokAccount = await getTokenAccount(provider, sellerFractions1Account);
+      let sellerFractionsTokAccountAmount = sellerFractionsTokAccount.amount.toNumber();
+      expect(sellerFractionsTokAccountAmount == total_shares - sold_shares, "Seller has correct amount of Fractions");
     });
 
     it ("Allows seller to cancel sale", async () => {
@@ -217,6 +238,14 @@ describe("Post a Sale, Cancel it, Post Another, then buyout", () => {
         }
       });
       await expectTX(new TransactionEnvelope(provider, [cancelIxn], [seller])).to.be.fulfilled;
+
+      let salesVaultFractionsTokAccount = await getTokenAccount(provider, salesVaultFractions1Account);
+      let salesVaultFractionsTokAccountAmount = salesVaultFractionsTokAccount.amount.toNumber();
+      expect(salesVaultFractionsTokAccountAmount == 0, "Sales vault kept fractions");
+
+      let sellerFractionsTokAccount = await getTokenAccount(provider, sellerFractions1Account);
+      let sellerFractionsTokAccountAmount = sellerFractionsTokAccount.amount.toNumber();
+      expect(sellerFractionsTokAccountAmount == total_shares, "Seller regained fractions");
     });
 
     it ("Allows user to post another sale", async () => {
@@ -285,6 +314,22 @@ describe("Post a Sale, Cancel it, Post Another, then buyout", () => {
         }
       })
       await expectTX(new TransactionEnvelope(provider, [postIxn], [seller])).to.be.fulfilled;
+
+      let bsVaultNftTokAccount = await getTokenAccount(provider, bsVaultNftAccount.address);
+      let bsVaultNftTokAccountAmount = bsVaultNftTokAccount.amount.toNumber();
+      expect(bsVaultNftTokAccountAmount == 1, "BS Vault didn't get NFT");
+
+      let sellerNftTokAccount = await getTokenAccount(provider, sellerNft2Key);
+      let sellerNftTokAccountAmount = sellerNftTokAccount.amount.toNumber();
+      expect(sellerNftTokAccountAmount == 0, "Seller Kept their NFT");
+
+      let salesVaultFractionsTokAccount = await getTokenAccount(provider, salesVaultFractions2Account);
+      let salesVaultFractionsTokAccountAmount = salesVaultFractionsTokAccount.amount.toNumber();
+      expect(salesVaultFractionsTokAccountAmount == sold_shares, "Sales Vault didn't get fractions");
+
+      let sellerFractionsTokAccount = await getTokenAccount(provider, sellerFractions2Account);
+      let sellerFractionsTokAccountAmount = sellerFractionsTokAccount.amount.toNumber();
+      expect(sellerFractionsTokAccountAmount == total_shares - sold_shares, "Seller kept incorrect fractions");
     });
 
     it ("Allows buyer to buyout", async () => {
@@ -323,6 +368,14 @@ describe("Post a Sale, Cancel it, Post Another, then buyout", () => {
         }
       })
       await expectTX(new TransactionEnvelope(provider, [buyoutIxn], [buyer])).to.be.fulfilled;
+
+      let salesVaultPaymentTokAccount = await getTokenAccount(provider, salesVault2Payment);
+      let salesVaultPaymentTokAccountAmount = salesVaultPaymentTokAccount.amount.toNumber();
+      expect(salesVaultPaymentTokAccountAmount == price, "Sales Vault didn't get Payment");
+
+      let buyerFractionsTokAccount = await getTokenAccount(provider, sellerFractions2Account);
+      let buyerFractionsTokAccountAmount = buyerFractionsTokAccount.amount.toNumber();
+      expect(buyerFractionsTokAccountAmount == sold_shares, "Buyer didn't get fractions");
     })
 
     it ("Allows seller to claim the payment", async () => {
@@ -347,5 +400,13 @@ describe("Post a Sale, Cancel it, Post Another, then buyout", () => {
         }
       })
       await expectTX(new TransactionEnvelope(provider, [claimIxn], [buyer])).to.be.fulfilled;
+
+      let salesVaultPaymentTokAccount = await getTokenAccount(provider, salesVault2Payment);
+      let salesVaultPaymentTokAccountAmount = salesVaultPaymentTokAccount.amount.toNumber();
+      expect(salesVaultPaymentTokAccountAmount == 0, "Sales vault held payment");
+
+      let sellerPaymentTokAccount = await getTokenAccount(provider, sellerPaymentAtai.address);
+      let sellerPaymentTokAccountAmount = sellerPaymentTokAccount.amount.toNumber();
+      expect(sellerPaymentTokAccountAmount == price, "Seller got incorrect payment");
     })
 });
