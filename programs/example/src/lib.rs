@@ -12,9 +12,41 @@ declare_id!("6QXj6hJwibgSTUCMiphcoQs1sBp66g8L3WXQCgGugG2h");
 
 #[program]
 pub mod example {
+
     use super::*;
 
-    pub fn example(ctx: Context<ExampleInstruction>) -> ProgramResult {
-        instructions::ix::handler(ctx)
+    #[allow(clippy::too_many_arguments)]
+    pub fn post_sale(
+        ctx: Context<PostSale>,
+        price: u64,
+        nonce: Pubkey,
+        sold_shares: u64,
+        total_shares: u64,
+        uri: String,
+        name: String,
+        symbol: String,
+    ) -> ProgramResult {
+        instructions::post_sale::handler(
+            ctx,
+            price,
+            nonce,
+            sold_shares,
+            total_shares,
+            uri,
+            name,
+            symbol,
+        )
+    }
+
+    pub fn buyout(ctx: Context<Buyout>) -> ProgramResult {
+        instructions::buyout::handler(ctx)
+    }
+
+    pub fn cancel_sale(ctx: Context<CancelSale>) -> ProgramResult {
+        instructions::cancel_sale::handler(ctx)
+    }
+
+    pub fn claim_buyout(ctx: Context<ClaimBuyout>) -> ProgramResult {
+        instructions::claim_buyout::handler(ctx)
     }
 }
