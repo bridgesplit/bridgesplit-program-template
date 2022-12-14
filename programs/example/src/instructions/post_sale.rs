@@ -5,6 +5,7 @@ use anchor_spl::{associated_token, associated_token::AssociatedToken, token::*};
 use vault::cpi::accounts::Fractionalize;
 use vault::program::Vault;
 
+use crate::errors::SpecificErrorCode;
 use crate::state::*;
 
 // Called when a user would like to sell a portion of an NFT
@@ -161,6 +162,12 @@ pub fn handler(
     name: String,      // Name for fractions metadata
     symbol: String,    // Symbol for fractions metadata
 ) -> ProgramResult {
+    if sold_shares > total_shares {
+        return Err(ProgramError::Custom(
+            SpecificErrorCode::OversoldNFTError.into(),
+        ));
+    }
+
     // Initialize the SalesVault PDA
     let sales_vault = &mut ctx.accounts.sales_vault; // Obtaining mutable reference
                                                      // Setting the initial state of PDA
