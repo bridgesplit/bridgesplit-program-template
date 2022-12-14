@@ -31,7 +31,7 @@ pub struct CancelSale<'info> {
     )]
     pub fractions_mint: Box<Account<'info, Mint>>,
 
-    // Users token account for these fractionsß
+    // Users token account for these fractions
     #[account(
         mut,
         constraint = seller_fractions_account.mint == fractions_mint.key(),
