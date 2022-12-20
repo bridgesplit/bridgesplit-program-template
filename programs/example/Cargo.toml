@@ -16,6 +16,9 @@ default = []
 
 [dependencies]
 anchor-lang = "0.24.2"
+anchor-spl = "0.24.2"
+num_enum = "0.5.6"
+vault = { git="ssh://git@github.com/bridgesplit/bridgesplit-program.git", features = ["no-entrypoint", "cpi"]}
 
 [dev-dependencies.cargo-husky]
 version = "1"

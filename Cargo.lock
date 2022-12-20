@@ -165,6 +165,57 @@ dependencies = [
 ]
 
 [[package]]
+name = "anchor-mpl-token-metadata"
+version = "0.0.1"
+source = "git+ssh://git@github.com/bridgesplit/bridgesplit-program.git#3b4e26882f901995061e7cda6fb7affa79e802f9"
+dependencies = [
+ "anchor-lang",
+ "anchor-spl",
+ "mpl-token-metadata",
+ "solana-program",
+ "spl-token",
+ "thiserror",
+]
+
+[[package]]
+name = "anchor-mpl-token-metadata"
+version = "0.0.1"
+source = "git+ssh://git@github.com/bridgesplit/multiasset-pools.git#8fc56944199967a91d73b2af40bdbebe15c4aa39"
+dependencies = [
+ "anchor-lang",
+ "anchor-spl",
+ "mpl-token-metadata",
+ "solana-program",
+ "spl-token",
+ "thiserror",
+]
+
+[[package]]
+name = "anchor-mpl-token-metadata"
+version = "0.0.1"
+source = "git+ssh://git@github.com/bridgesplit/queue-protocol.git#78c4a926deec80e98eaeae3e4937ff6f14713144"
+dependencies = [
+ "anchor-lang",
+ "anchor-spl",
+ "mpl-token-metadata",
+ "solana-program",
+ "spl-token",
+ "thiserror",
+]
+
+[[package]]
+name = "anchor-spl"
+version = "0.24.2"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "0188c33b4a3c124c4e593f2b440415aaea70a7650fac6ba0772395385d71c003"
+dependencies = [
+ "anchor-lang",
+ "solana-program",
+ "spl-associated-token-account",
+ "spl-token",
+]
+
+[[package]]
 name = "anchor-syn"
 version = "0.24.2"
 source = "registry+https://github.com/rust-lang/crates.io-index"
@@ -210,6 +261,15 @@ dependencies = [
  "hermit-abi",
  "libc",
  "winapi",
+]
+
+[[package]]
+name = "augur"
+version = "0.1.0"
+source = "git+ssh://git@github.com/bridgesplit/multiasset-pools.git#8fc56944199967a91d73b2af40bdbebe15c4aa39"
+dependencies = [
+ "anchor-lang",
+ "thiserror",
 ]
 
 [[package]]
@@ -302,7 +362,7 @@ checksum = "6441c552f230375d18e3cc377677914d2ca2b0d36e52129fe15450a2dce46775"
 dependencies = [
  "borsh-derive-internal",
  "borsh-schema-derive-internal",
- "proc-macro-crate",
+ "proc-macro-crate 0.1.5",
  "proc-macro2",
  "syn",
 ]
@@ -327,6 +387,59 @@ dependencies = [
  "proc-macro2",
  "quote",
  "syn",
+]
+
+[[package]]
+name = "bridgesplit-paid-claim-approver"
+version = "1.4.9"
+source = "git+ssh://git@github.com/bridgesplit/bridgesplit-token-controller.git#935e547542c464a654c63e254e4bbf49942f66de"
+dependencies = [
+ "anchor-lang",
+ "anchor-spl",
+ "bridgesplit-payment-manager",
+ "bridgesplit-token-manager",
+ "solana-program",
+ "spl-associated-token-account",
+ "spl-token",
+]
+
+[[package]]
+name = "bridgesplit-payment-manager"
+version = "1.4.9"
+source = "git+ssh://git@github.com/bridgesplit/bridgesplit-token-controller.git#935e547542c464a654c63e254e4bbf49942f66de"
+dependencies = [
+ "anchor-lang",
+ "anchor-spl",
+ "solana-program",
+ "spl-associated-token-account",
+ "spl-token",
+]
+
+[[package]]
+name = "bridgesplit-time-invalidator"
+version = "1.4.9"
+source = "git+ssh://git@github.com/bridgesplit/bridgesplit-token-controller.git#935e547542c464a654c63e254e4bbf49942f66de"
+dependencies = [
+ "anchor-lang",
+ "anchor-spl",
+ "bridgesplit-payment-manager",
+ "bridgesplit-token-manager",
+ "solana-program",
+ "spl-associated-token-account",
+ "spl-token",
+]
+
+[[package]]
+name = "bridgesplit-token-manager"
+version = "1.4.9"
+source = "git+ssh://git@github.com/bridgesplit/bridgesplit-token-controller.git#935e547542c464a654c63e254e4bbf49942f66de"
+dependencies = [
+ "anchor-lang",
+ "anchor-spl",
+ "mpl-token-metadata",
+ "solana-program",
+ "spl-associated-token-account",
+ "spl-token",
 ]
 
 [[package]]
@@ -519,7 +632,10 @@ name = "example"
 version = "0.1.0"
 dependencies = [
  "anchor-lang",
+ "anchor-spl",
  "cargo-husky",
+ "num_enum",
+ "vault",
 ]
 
 [[package]]
@@ -589,6 +705,12 @@ checksum = "62b467343b94ba476dcb2500d242dadbb39557df889310ac77c5d99100aaac33"
 dependencies = [
  "libc",
 ]
+
+[[package]]
+name = "hex"
+version = "0.4.3"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "7f24254aa9a54b5c858eaee2f5bccdb46aaf0e486a595ed5fd8f86ba55232a70"
 
 [[package]]
 name = "hmac"
@@ -751,6 +873,58 @@ dependencies = [
 ]
 
 [[package]]
+name = "mpl-token-metadata"
+version = "1.4.3"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "e719d7e0b5a9d97c7fd4d6f52ebfc32f1e3942e068173e47355f8c275656488a"
+dependencies = [
+ "arrayref",
+ "borsh",
+ "mpl-token-vault",
+ "num-derive",
+ "num-traits",
+ "shank 0.0.11",
+ "solana-program",
+ "spl-associated-token-account",
+ "spl-token",
+ "thiserror",
+]
+
+[[package]]
+name = "mpl-token-vault"
+version = "0.1.0"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "7ade4ef15bc06a6033076c4ff28cba9b42521df5ec61211d6f419415ace2746a"
+dependencies = [
+ "borsh",
+ "num-derive",
+ "num-traits",
+ "solana-program",
+ "spl-token",
+ "thiserror",
+]
+
+[[package]]
+name = "multiasset-pools"
+version = "0.1.0"
+source = "git+ssh://git@github.com/bridgesplit/multiasset-pools.git#8fc56944199967a91d73b2af40bdbebe15c4aa39"
+dependencies = [
+ "anchor-lang",
+ "anchor-mpl-token-metadata 0.0.1 (git+ssh://git@github.com/bridgesplit/multiasset-pools.git)",
+ "anchor-spl",
+ "augur",
+ "bridgesplit-paid-claim-approver",
+ "bridgesplit-payment-manager",
+ "bridgesplit-time-invalidator",
+ "bridgesplit-token-manager",
+ "hex",
+ "mpl-token-metadata",
+ "num_enum",
+ "solana-program",
+ "spl-associated-token-account",
+]
+
+[[package]]
 name = "num-derive"
 version = "0.3.3"
 source = "registry+https://github.com/rust-lang/crates.io-index"
@@ -768,6 +942,27 @@ source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "578ede34cf02f8924ab9447f50c28075b4d3e5b269972345e7e0372b38c6cdcd"
 dependencies = [
  "autocfg",
+]
+
+[[package]]
+name = "num_enum"
+version = "0.5.7"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "cf5395665662ef45796a4ff5486c5d41d29e0c09640af4c5f17fd94ee2c119c9"
+dependencies = [
+ "num_enum_derive",
+]
+
+[[package]]
+name = "num_enum_derive"
+version = "0.5.7"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "3b0498641e53dd6ac1a4f22547548caa6864cc4933784319cd1775271c5a46ce"
+dependencies = [
+ "proc-macro-crate 1.2.1",
+ "proc-macro2",
+ "quote",
+ "syn",
 ]
 
 [[package]]
@@ -823,6 +1018,17 @@ dependencies = [
 ]
 
 [[package]]
+name = "proc-macro-crate"
+version = "1.2.1"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "eda0fc3b0fb7c975631757e14d9049da17374063edb6ebbcbc54d880d4fe94e9"
+dependencies = [
+ "once_cell",
+ "thiserror",
+ "toml",
+]
+
+[[package]]
 name = "proc-macro2"
 version = "1.0.43"
 source = "registry+https://github.com/rust-lang/crates.io-index"
@@ -842,6 +1048,18 @@ dependencies = [
  "syn",
  "version_check",
  "yansi",
+]
+
+[[package]]
+name = "queue-protocol"
+version = "0.1.0"
+source = "git+ssh://git@github.com/bridgesplit/queue-protocol.git#78c4a926deec80e98eaeae3e4937ff6f14713144"
+dependencies = [
+ "anchor-lang",
+ "anchor-mpl-token-metadata 0.0.1 (git+ssh://git@github.com/bridgesplit/queue-protocol.git)",
+ "anchor-spl",
+ "mpl-token-metadata",
+ "thiserror",
 ]
 
 [[package]]
@@ -919,6 +1137,41 @@ name = "regex-syntax"
 version = "0.6.27"
 source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "a3f87b73ce11b1619a3c6332f45341e0047173771e8b8b73f87bfeefb7b56244"
+
+[[package]]
+name = "rental-auxilary"
+version = "0.1.0"
+source = "git+ssh://git@github.com/bridgesplit/rentals.git#bf6170dd2f4eaaf66a6cef58ae4a21c7a9e1394a"
+dependencies = [
+ "anchor-lang",
+ "anchor-spl",
+ "bridgesplit-paid-claim-approver",
+ "bridgesplit-time-invalidator",
+ "bridgesplit-token-manager",
+ "mpl-token-metadata",
+ "num_enum",
+ "solana-program",
+ "spl-associated-token-account",
+ "spl-token",
+]
+
+[[package]]
+name = "rentals"
+version = "0.1.0"
+source = "git+ssh://git@github.com/bridgesplit/rentals.git#bf6170dd2f4eaaf66a6cef58ae4a21c7a9e1394a"
+dependencies = [
+ "anchor-lang",
+ "anchor-spl",
+ "bridgesplit-paid-claim-approver",
+ "bridgesplit-time-invalidator",
+ "bridgesplit-token-manager",
+ "mpl-token-metadata",
+ "num_enum",
+ "rental-auxilary",
+ "solana-program",
+ "spl-associated-token-account",
+ "spl-token",
+]
 
 [[package]]
 name = "rustc_version"
@@ -1016,6 +1269,74 @@ dependencies = [
  "digest 0.9.0",
  "keccak",
  "opaque-debug",
+]
+
+[[package]]
+name = "shank"
+version = "0.0.4"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "85a6c6cad96abd1fd950d1df186ec02e786566161f03adadbb7cf157ae9a82d8"
+dependencies = [
+ "shank_macro 0.0.4",
+]
+
+[[package]]
+name = "shank"
+version = "0.0.11"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "b63e565b5e95ad88ab38f312e89444c749360641c509ef2de0093b49f55974a5"
+dependencies = [
+ "shank_macro 0.0.11",
+]
+
+[[package]]
+name = "shank_macro"
+version = "0.0.4"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "c0b3bf722b43cea02627c7fd89925f5861f7aa27604c1852720f8eee1a73523d"
+dependencies = [
+ "proc-macro2",
+ "quote",
+ "shank_macro_impl 0.0.4",
+ "syn",
+]
+
+[[package]]
+name = "shank_macro"
+version = "0.0.11"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "63927d22a1e8b74bda98cc6e151fcdf178b7abb0dc6c4f81e0bbf5ffe2fc4ec8"
+dependencies = [
+ "proc-macro2",
+ "quote",
+ "shank_macro_impl 0.0.11",
+ "syn",
+]
+
+[[package]]
+name = "shank_macro_impl"
+version = "0.0.4"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "90a37f762b0529d64a9e3401ac3829e132f58fa9bc50b1fd6ad7b5a1a414a228"
+dependencies = [
+ "anyhow",
+ "proc-macro2",
+ "quote",
+ "serde",
+ "syn",
+]
+
+[[package]]
+name = "shank_macro_impl"
+version = "0.0.11"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "40ce03403df682f80f4dc1efafa87a4d0cb89b03726d0565e6364bdca5b9a441"
+dependencies = [
+ "anyhow",
+ "proc-macro2",
+ "quote",
+ "serde",
+ "syn",
 ]
 
 [[package]]
@@ -1124,6 +1445,31 @@ dependencies = [
 ]
 
 [[package]]
+name = "spl-associated-token-account"
+version = "1.0.5"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "2b013067447a1396303ddfc294f36e3d260a32f8a16c501c295bcdc7de39b490"
+dependencies = [
+ "borsh",
+ "solana-program",
+ "spl-token",
+]
+
+[[package]]
+name = "spl-token"
+version = "3.3.0"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "0cc67166ef99d10c18cb5e9c208901e6d8255c6513bb1f877977eba48e6cc4fb"
+dependencies = [
+ "arrayref",
+ "num-derive",
+ "num-traits",
+ "num_enum",
+ "solana-program",
+ "thiserror",
+]
+
+[[package]]
 name = "subtle"
 version = "2.4.1"
 source = "registry+https://github.com/rust-lang/crates.io-index"
@@ -1195,6 +1541,29 @@ name = "unicode-segmentation"
 version = "1.9.0"
 source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "7e8820f5d777f6224dc4be3632222971ac30164d4a258d595640799554ebfd99"
+
+[[package]]
+name = "vault"
+version = "0.1.1"
+source = "git+ssh://git@github.com/bridgesplit/bridgesplit-program.git#3b4e26882f901995061e7cda6fb7affa79e802f9"
+dependencies = [
+ "anchor-lang",
+ "anchor-mpl-token-metadata 0.0.1 (git+ssh://git@github.com/bridgesplit/bridgesplit-program.git)",
+ "anchor-spl",
+ "bridgesplit-paid-claim-approver",
+ "bridgesplit-time-invalidator",
+ "bridgesplit-token-manager",
+ "hex",
+ "mpl-token-metadata",
+ "multiasset-pools",
+ "num_enum",
+ "queue-protocol",
+ "rentals",
+ "shank 0.0.4",
+ "spl-associated-token-account",
+ "spl-token",
+ "thiserror",
+]
 
 [[package]]
 name = "version_check"

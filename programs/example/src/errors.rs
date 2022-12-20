@@ -2,6 +2,6 @@ use anchor_lang::prelude::*;
 
 #[error_code]
 pub enum SpecificErrorCode {
-    #[msg("Example Error")]
-    ExampleError,
+    #[msg("Can't sell more than the whole NFT")]
+    OversoldNFTError,
 }
